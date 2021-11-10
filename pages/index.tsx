@@ -1,10 +1,18 @@
-import type { NextPage } from 'next';
+import type { NextPage, NextPageContext } from 'next';
 import Head from 'next/head';
 import React from 'react';
+
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
+import Results from '../components/Results';
+import { Result } from '../interfaces';
+import { movieList } from '../utils/requests';
 
-const Home: NextPage = () => {
+interface Props {
+  results: Result[];
+}
+
+const Home: NextPage<Props> = ({ results }) => {
   return (
     <div>
       <Head>
@@ -14,8 +22,23 @@ const Home: NextPage = () => {
       </Head>
       <Header />
       <NavBar />
+      <Results results={results} />
     </div>
   );
+};
+
+export const getServerSideProps = async (context: NextPageContext) => {
+  const genre = context.query.genre;
+
+  const request = await fetch(
+    `https://api.themoviedb.org/3${movieList[genre as string]?.url}`
+  ).then((res) => res.json());
+
+  return {
+    props: {
+      results: request.results,
+    },
+  };
 };
 
 export default Home;
