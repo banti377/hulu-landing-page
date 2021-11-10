@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import Results from '../components/Results';
 import { Result } from '../interfaces';
+import { MovieListKeys } from '../types';
 import { movieList } from '../utils/requests';
 
 interface Props {
@@ -28,10 +29,10 @@ const Home: NextPage<Props> = ({ results }) => {
 };
 
 export const getServerSideProps = async (context: NextPageContext) => {
-  const genre = context.query.genre;
+  const genre = context.query.genre as MovieListKeys;
 
   const request = await fetch(
-    `https://api.themoviedb.org/3${movieList[genre as string]?.url}`
+    `https://api.themoviedb.org/3${movieList[genre]?.url}`
   ).then((res) => res.json());
 
   return {
