@@ -29,7 +29,7 @@ const Home: NextPage<Props> = ({ results }) => {
 };
 
 export const getServerSideProps = async (context: NextPageContext) => {
-  const genre = context.query.genre as MovieListKeys;
+  const genre = (context.query.genre as MovieListKeys) || 'fetchTrending';
 
   const request = await fetch(
     `https://api.themoviedb.org/3${movieList[genre]?.url}`
